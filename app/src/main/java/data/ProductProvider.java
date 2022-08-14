@@ -7,6 +7,8 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -66,7 +68,23 @@ public class ProductProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        return null;
+        SQLiteDatabase sqLiteDatabase = productDbHelper.getWritableDatabase();
+        long newRowId;
+
+        switch(uriMatcher.match(uri)) {
+            case PETS:
+                newRowId = sqLiteDatabase.insert(ProductEntry.TABLE_NAME, null, contentValues);
+
+                if(newRowId == -1) {
+                    Log.e("Con Provider Insert: ", "Error inserting row for " + uri);
+                    return null;
+                }
+                break;
+
+            default:
+                throw new IllegalArgumentException("Cannot insert URI " + uri);
+        }
+        return ContentUris.withAppendedId(ProductEntry.CONTENT_URI, newRowId);
     }
 
     @Override

@@ -1,9 +1,12 @@
 package com.example.inventoryapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,8 +25,6 @@ public class DetailsActivity extends AppCompatActivity {
     private EditText quantityEditText;
     private EditText supplierEditText;
 
-    private ProductDbHelper productDbHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,13 +36,10 @@ public class DetailsActivity extends AppCompatActivity {
         quantityEditText = findViewById(R.id.quantity_edit_text);
         supplierEditText = findViewById(R.id.supplier_edit_text);
 
-        productDbHelper = new ProductDbHelper(this);
-
         addProductTbox.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.R)
             @Override
             public void onClick(View view) {
-
-                SQLiteDatabase database = productDbHelper.getWritableDatabase();
 
                 String name = nameEditText.getText().toString().trim();
                 String priceString = priceEditText.getText().toString().trim();
@@ -54,7 +52,14 @@ public class DetailsActivity extends AppCompatActivity {
                 values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityString);
                 values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplier);
 
-                database.insert(ProductEntry.TABLE_NAME, null, values);
+                Uri uri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+
+                if(uri == null) {
+                    Toast.makeText(getApplicationContext(), "Failed to insert Product", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Product inserted successfully", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
