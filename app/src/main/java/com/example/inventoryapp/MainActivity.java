@@ -35,15 +35,33 @@ public class MainActivity extends AppCompatActivity {
         displayDbInfo();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        displayDbInfo();
+    }
+
     private void displayDbInfo() {
         ProductDbHelper productDbHelper = new ProductDbHelper(this);
         SQLiteDatabase sqLiteDatabase = productDbHelper.getReadableDatabase();
 
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + ProductEntry.TABLE_NAME, null);
+        String[] projection = {ProductEntry.COLUMN_PRODUCT_ID, ProductEntry.COLUMN_PRODUCT_NAME, ProductEntry.COLUMN_PRODUCT_PRICE};
+        Cursor cursor = sqLiteDatabase.query(ProductEntry.TABLE_NAME, projection, null, null, null, null, null);
+
+        int idColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_ID);
+        int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
+        int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
 
         try {
             TextView displayText = findViewById(R.id.temp_display);
-            displayText.setText("Number of rows: " + cursor.getCount());
+
+            while(cursor.moveToNext()) {
+                int id = cursor.getInt(idColumnIndex);
+                String name = cursor.getString(nameColumnIndex);
+                int price = cursor.getInt(priceColumnIndex);
+
+                displayText.append("\n" + id + " - " + name + " - " + price);
+            }
         }
         finally {
             cursor.close();

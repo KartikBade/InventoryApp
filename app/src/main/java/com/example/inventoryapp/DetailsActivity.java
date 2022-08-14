@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import data.ProductContract;
 import data.ProductDbHelper;
@@ -40,15 +41,15 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String name = nameEditText.getText().toString().trim();
-                String price = priceEditText.getText().toString().trim();
-                String quantity = quantityEditText.getText().toString().trim();
+                String priceString = priceEditText.getText().toString().trim();
+                String quantityString = quantityEditText.getText().toString().trim();
                 String supplier = supplierEditText.getText().toString().trim();
 
                 ContentValues values = new ContentValues();
-                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, "Plastic");
-                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, 1000);
-                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, 10);
-                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER, "JoshiCorp");
+                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, name);
+                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, priceString);
+                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityString);
+                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplier);
 
                 SQLiteDatabase database = productDbHelper.getWritableDatabase();
 
