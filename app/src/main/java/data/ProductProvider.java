@@ -68,6 +68,27 @@ public class ProductProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
+
+        String name = contentValues.getAsString(ProductEntry.COLUMN_PRODUCT_NAME);
+        if (name == null || name.length() < 0) {
+            throw new IllegalArgumentException("Product requires a name");
+        }
+
+        Integer price = contentValues.getAsInteger(ProductEntry.COLUMN_PRODUCT_PRICE);
+        if (price == null || price < 0) {
+            throw new IllegalArgumentException("Product requires valid price");
+        }
+
+        Integer quantity = contentValues.getAsInteger(ProductEntry.COLUMN_PRODUCT_QUANTITY);
+        if (quantity == null || quantity < 0) {
+            throw new IllegalArgumentException("Product requires valid quantity");
+        }
+
+        String supplier = contentValues.getAsString(ProductEntry.COLUMN_PRODUCT_NAME);
+        if (supplier == null || supplier.length() < 0) {
+            throw new IllegalArgumentException("Product requires a supplier");
+        }
+
         SQLiteDatabase sqLiteDatabase = productDbHelper.getWritableDatabase();
         long newRowId;
 
@@ -89,6 +110,8 @@ public class ProductProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
+        SQLiteDatabase sqLiteDatabase = productDbHelper.getWritableDatabase();
+        sqLiteDatabase.delete(ProductEntry.TABLE_NAME, null, null);
         return 0;
     }
 

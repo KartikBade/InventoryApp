@@ -48,13 +48,13 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void displayDbInfo() {
 
-        String[] projection = {ProductEntry.COLUMN_PRODUCT_ID, ProductEntry.COLUMN_PRODUCT_NAME, ProductEntry.COLUMN_PRODUCT_PRICE};
-
-        Cursor cursor = getContentResolver().query(ProductEntry.CONTENT_URI, projection, null, null);
+        Cursor cursor = getContentResolver().query(ProductEntry.CONTENT_URI, null, null, null);
 
         int idColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_ID);
         int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
         int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
+        int supplierColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_SUPPLIER);
+        int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
 
         try {
             TextView displayText = findViewById(R.id.temp_display);
@@ -63,8 +63,10 @@ public class MainActivity extends AppCompatActivity {
                 int id = cursor.getInt(idColumnIndex);
                 String name = cursor.getString(nameColumnIndex);
                 int price = cursor.getInt(priceColumnIndex);
+                String supplier = cursor.getString(supplierColumnIndex);
+                int quantity = cursor.getInt(quantityColumnIndex);
 
-                displayText.append("\n" + id + " - " + name + " - " + price);
+                displayText.append("\n" + id + " - " + name + " - " + price + " - " + supplier + " - " + quantity);
             }
         }
         finally {

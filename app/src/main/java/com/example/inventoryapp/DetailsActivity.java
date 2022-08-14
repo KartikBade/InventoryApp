@@ -46,10 +46,19 @@ public class DetailsActivity extends AppCompatActivity {
                 String quantityString = quantityEditText.getText().toString().trim();
                 String supplier = supplierEditText.getText().toString().trim();
 
+                int price = -1;
+                int quantity = -1;
+                try {
+                    price = Integer.parseInt(priceString);
+                    quantity = Integer.parseInt(quantityString);
+                } catch (Exception e) {
+                    Log.e("DetailsActivity: ", "Error converting price and/or quantity from string to int" + e);
+                }
+
                 ContentValues values = new ContentValues();
                 values.put(ProductEntry.COLUMN_PRODUCT_NAME, name);
-                values.put(ProductEntry.COLUMN_PRODUCT_PRICE, priceString);
-                values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityString);
+                values.put(ProductEntry.COLUMN_PRODUCT_PRICE, price);
+                values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
                 values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplier);
 
                 Uri uri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
