@@ -1,10 +1,12 @@
 package com.example.inventoryapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton fab;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,18 +38,19 @@ public class MainActivity extends AppCompatActivity {
         displayDbInfo();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStart() {
         super.onStart();
         displayDbInfo();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void displayDbInfo() {
-        ProductDbHelper productDbHelper = new ProductDbHelper(this);
-        SQLiteDatabase sqLiteDatabase = productDbHelper.getReadableDatabase();
 
         String[] projection = {ProductEntry.COLUMN_PRODUCT_ID, ProductEntry.COLUMN_PRODUCT_NAME, ProductEntry.COLUMN_PRODUCT_PRICE};
-        Cursor cursor = sqLiteDatabase.query(ProductEntry.TABLE_NAME, projection, null, null, null, null, null);
+
+        Cursor cursor = getContentResolver().query(ProductEntry.CONTENT_URI, projection, null, null);
 
         int idColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_ID);
         int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);

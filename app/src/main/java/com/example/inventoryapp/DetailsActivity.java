@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import data.ProductContract;
+import data.ProductContract.ProductEntry;
 import data.ProductDbHelper;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -40,21 +40,21 @@ public class DetailsActivity extends AppCompatActivity {
         addProductTbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                SQLiteDatabase database = productDbHelper.getWritableDatabase();
+
                 String name = nameEditText.getText().toString().trim();
                 String priceString = priceEditText.getText().toString().trim();
                 String quantityString = quantityEditText.getText().toString().trim();
                 String supplier = supplierEditText.getText().toString().trim();
 
                 ContentValues values = new ContentValues();
-                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, name);
-                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, priceString);
-                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityString);
-                values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplier);
+                values.put(ProductEntry.COLUMN_PRODUCT_NAME, name);
+                values.put(ProductEntry.COLUMN_PRODUCT_PRICE, priceString);
+                values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityString);
+                values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplier);
 
-                SQLiteDatabase database = productDbHelper.getWritableDatabase();
-
-                database.insert(ProductContract.ProductEntry.TABLE_NAME, null, values);
-
+                database.insert(ProductEntry.TABLE_NAME, null, values);
             }
         });
     }
