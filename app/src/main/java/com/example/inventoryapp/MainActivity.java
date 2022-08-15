@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,12 +20,16 @@ import data.ProductDbHelper;
 public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton fab;
+    private ListView mainList;
+    private ProductAdapter productAdapter;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mainList = findViewById(R.id.main_list);
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -47,30 +52,14 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void displayDbInfo() {
-
-        Cursor cursor = getContentResolver().query(ProductEntry.CONTENT_URI, null, null, null);
-
-        int idColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_ID);
-        int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
-        int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
-        int supplierColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_SUPPLIER);
-        int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
-
-        try {
-            TextView displayText = findViewById(R.id.temp_display);
-
-            while(cursor.moveToNext()) {
-                int id = cursor.getInt(idColumnIndex);
-                String name = cursor.getString(nameColumnIndex);
-                int price = cursor.getInt(priceColumnIndex);
-                String supplier = cursor.getString(supplierColumnIndex);
-                int quantity = cursor.getInt(quantityColumnIndex);
-
-                displayText.append("\n" + id + " - " + name + " - " + price + " - " + supplier + " - " + quantity);
-            }
-        }
-        finally {
-            cursor.close();
-        }
+        String[] projection = {
+                ProductEntry._ID,
+                ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductEntry.COLUMN_PRODUCT_PRICE,
+                ProductEntry.COLUMN_PRODUCT_QUANTITY
+        };
+        Cursor cursor = getContentResolver().query(ProductEntry.CONTENT_URI, projection, null, null);
+        productAdapter = new ProductAdapter(this, cursor);
+        mainList.setAdapter(productAdapter);
     }
 }

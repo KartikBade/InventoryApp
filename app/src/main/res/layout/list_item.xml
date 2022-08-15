@@ -2,7 +2,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -14,7 +15,7 @@
             android:id="@+id/item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
+            android:textSize="16sp"
             android:fontFamily="sans-serif-black"
             tools:text="Name" />
 
@@ -23,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="12sp"
             tools:text="$1000"/>
 
     </LinearLayout>
@@ -35,7 +36,7 @@
         android:layout_centerInParent="true"
         android:layout_toLeftOf="@id/sale"
         android:padding="10dp"
-        android:textSize="24sp"
+        android:textSize="16sp"
         tools:text="10" />
 
     <TextView
@@ -50,6 +51,6 @@
         android:text="SALE"
         android:fontFamily="sans-serif-black"
         android:textColor="@color/white"
-        android:textSize="24sp"/>
+        android:textSize="12sp"/>
 
 </RelativeLayout>
