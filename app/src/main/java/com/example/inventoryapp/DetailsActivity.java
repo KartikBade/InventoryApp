@@ -52,7 +52,7 @@ public class DetailsActivity extends AppCompatActivity {
                     price = Integer.parseInt(priceString);
                     quantity = Integer.parseInt(quantityString);
                 } catch (Exception e) {
-                    Log.e("DetailsActivity: ", "Error converting price and/or quantity from string to int" + e);
+                    Log.e("DetailsActivity: ", "Error converting price and/or quantity from string to int " + e);
                 }
 
                 ContentValues values = new ContentValues();
