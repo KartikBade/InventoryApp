@@ -36,6 +36,7 @@
         android:layout_centerInParent="true"
         android:layout_toLeftOf="@id/sale"
         android:padding="10dp"
+        android:layout_marginRight="10dp"
         android:textSize="16sp"
         tools:text="10" />
 

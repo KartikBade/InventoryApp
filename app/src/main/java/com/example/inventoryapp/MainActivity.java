@@ -9,11 +9,14 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -49,6 +52,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         productAdapter = new ProductAdapter(this, null);
         mainList.setAdapter(productAdapter);
+
+        mainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                Uri currenrUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, l);
+                intent.setData(currenrUri);
+                startActivity(intent);
+            }
+        });
 
         getSupportLoaderManager().initLoader(PRODUCT_LOADER, null, this);
     }

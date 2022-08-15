@@ -56,6 +56,7 @@ public class ProductProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
@@ -87,6 +88,8 @@ public class ProductProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot insert URI " + uri);
         }
+
+        getContext().getContentResolver().notifyChange(uri, null);
         return newRowUri;
     }
 
@@ -94,22 +97,22 @@ public class ProductProvider extends ContentProvider {
 
         String name = contentValues.getAsString(ProductEntry.COLUMN_PRODUCT_NAME);
         if (name == null || name.length() < 0) {
-            throw new IllegalArgumentException("Product requires a name");
+            return null;
         }
 
         Integer price = contentValues.getAsInteger(ProductEntry.COLUMN_PRODUCT_PRICE);
         if (price == null || price < 0) {
-            throw new IllegalArgumentException("Product requires valid price");
+            return null;
         }
 
         Integer quantity = contentValues.getAsInteger(ProductEntry.COLUMN_PRODUCT_QUANTITY);
         if (quantity == null || quantity < 0) {
-            throw new IllegalArgumentException("Product requires valid quantity");
+            return null;
         }
 
         String supplier = contentValues.getAsString(ProductEntry.COLUMN_PRODUCT_SUPPLIER);
         if (supplier == null || supplier.length() < 0) {
-            throw new IllegalArgumentException("Product requires a supplier");
+            return null;
         }
 
         SQLiteDatabase sqLiteDatabase = productDbHelper.getWritableDatabase();
@@ -124,8 +127,8 @@ public class ProductProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        SQLiteDatabase sqLiteDatabase = productDbHelper.getWritableDatabase();
 
+        SQLiteDatabase sqLiteDatabase = productDbHelper.getWritableDatabase();
         int newRowId;
         switch (uriMatcher.match(uri)) {
             case PRODUCT_ID:
@@ -135,6 +138,7 @@ public class ProductProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Error deleting row for: " + uri);
         }
+        getContext().getContentResolver().notifyChange(uri, null);
         return newRowId;
     }
 
@@ -156,6 +160,7 @@ public class ProductProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot update URI: " + uri);
         }
+        getContext().getContentResolver().notifyChange(uri, null);
         return newRowId;
     }
 
@@ -164,28 +169,28 @@ public class ProductProvider extends ContentProvider {
         if(contentValues.containsKey(ProductEntry.COLUMN_PRODUCT_NAME)) {
             String name = contentValues.getAsString(ProductEntry.COLUMN_PRODUCT_NAME);
             if (name == null || name.length() < 0) {
-                throw new IllegalArgumentException("Product requires a name");
+                return 0;
             }
         }
 
         if(contentValues.containsKey(ProductEntry.COLUMN_PRODUCT_PRICE)) {
             Integer price = contentValues.getAsInteger(ProductEntry.COLUMN_PRODUCT_PRICE);
             if (price == null || price < 0) {
-                throw new IllegalArgumentException("Product requires valid price");
+                return 0;
             }
         }
 
         if(contentValues.containsKey(ProductEntry.COLUMN_PRODUCT_QUANTITY)) {
             Integer quantity = contentValues.getAsInteger(ProductEntry.COLUMN_PRODUCT_QUANTITY);
             if (quantity == null || quantity < 0) {
-                throw new IllegalArgumentException("Product requires valid quantity");
+                return 0;
             }
         }
 
         if(contentValues.containsKey(ProductEntry.COLUMN_PRODUCT_SUPPLIER)) {
             String supplier = contentValues.getAsString(ProductEntry.COLUMN_PRODUCT_SUPPLIER);
             if (supplier == null || supplier.length() < 0) {
-                throw new IllegalArgumentException("Product requires a supplier");
+                return 0;
             }
         }
 
