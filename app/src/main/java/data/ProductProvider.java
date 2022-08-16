@@ -132,6 +132,8 @@ public class ProductProvider extends ContentProvider {
         int newRowId;
         switch (uriMatcher.match(uri)) {
             case PRODUCT_ID:
+                s = ProductEntry._ID + "=?";
+                strings = new String[] {String.valueOf(ContentUris.parseId(uri))};
                 newRowId = sqLiteDatabase.delete(ProductEntry.TABLE_NAME, s, strings);
                 break;
 
