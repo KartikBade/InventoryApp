@@ -79,7 +79,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         }
 
         addProductTbox.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.R)
             @Override
             public void onClick(View view) {
                 saveProduct();
